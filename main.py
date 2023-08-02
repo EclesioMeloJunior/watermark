@@ -27,7 +27,7 @@ def resize(watermark):
 
     return resized
 
-def append_watermark_to_image(image, watermark_image):
+def append_watermark_to_image(name, image, watermark_image):
     resized_watermark = resize(watermark_image)
 
     height, width, _ = image.shape
@@ -45,8 +45,7 @@ def append_watermark_to_image(image, watermark_image):
     result = cv2.addWeighted(destination, 1, resized_watermark, 0.2, 0)
     image[top_y:bottom_y, left_x:right_x] = result
 
-    cv2.imshow("Watermarked Image", image)
-    cv2.imwrite("watermarked.jpg", img)
+    cv2.imwrite(name + "watermarked.jpg", image)
     cv2.destroyAllWindows()
 
 def run_watermark(folder_path, watermark_path):
@@ -55,7 +54,8 @@ def run_watermark(folder_path, watermark_path):
 
     for image_path in contents:
         loaded_image = cv2.imread(image_path)
-        append_watermark_to_image(loaded_image, watermark_image)
+        image_name = os.path.splitext(image_path)[0]
+        append_watermark_to_image(image_name, loaded_image, watermark_image)
 
 
 [folder_path, watermark_path] = sys.argv[1:]
